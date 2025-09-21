@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "dotenv -e .env -- ts-node-dev --transpile-only ./src/index.ts",
+    "deploy:hyperliquid": "dotenv -e .env -- ts-node-dev --transpile-only --exit-child ./src/index.ts deploy:hyperliquid",
     "build": "tsup --config build.ts",
     "start": "dotenv -e .env -- node ./dist/index.js",
     "lint": "eslint",

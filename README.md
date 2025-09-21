@@ -25,26 +25,61 @@ cd ts-template
 
 ### 2. Install Dependencies
 
-Make sure you have pnpm installed. Then, run:
+Make sure you have [Yarn](https://yarnpkg.com/) installed (this project is configured for Yarn Berry). Then, run:
 
 ```bash
-pnpm install
+yarn install
 ```
 
-### 3. Start Developing
+### 3. Configure Hyperliquid Credentials
+
+Copy the example environment file and provide your Hyperliquid testnet details:
+
+```bash
+cp .env.example .env
+```
+
+Set the following variables in `.env`:
+
+- `HYPERLIQUID_PRIVATE_KEY` – Vault signer private key as a 0x-prefixed 64 character hex string.
+- `HYPERLIQUID_TESTNET_RPC_URL` – HTTP RPC endpoint for the Hyperliquid testnet.
+- `HYPERLIQUID_TESTNET_WS_URL` – WebSocket endpoint for the Hyperliquid testnet.
+- `HYPERLIQUID_VAULT_ADDRESS` – Vault contract address you plan to publish.
+
+The CLI validates these values on start-up and exits with a helpful error message if anything is missing or malformed.
+
+### 4. Run the Hyperliquid deployment script
+
+With your environment configured, trigger a deployment attempt against the Hyperliquid testnet:
+
+```bash
+yarn deploy:hyperliquid
+```
+
+Expected logs include the vault being targeted, the client method signature that succeeded, and any response returned by the SDK:
+
+```text
+Preparing Hyperliquid deployment for vault 0xabc123...
+Hyperliquid deployment succeeded using deploy(payload, signer).
+Hyperliquid response: { "txHash": "0x..." }
+```
+
+If deployment fails you will see `Hyperliquid deployment failed:` followed by detailed method attempts, and the command exits with status code `1`.
+
+### 5. Start Developing
 
 Kickstart your development with autoreload on save:
 
 ```bash
-pnpm dev
+yarn dev
 ```
 
-### 4. Build for Production
+### 6. Build for Production
 
 Ready to ship? Build your project with:
 
 ```bash
-pnpm build
+yarn build
 ```
 
 ### Project Structure 📁
@@ -67,6 +102,7 @@ ts-template/
 ### Scripts 📝
 
 * **yarn dev:** Run your project with autoreload.
+* **yarn deploy:hyperliquid:** Load `.env`, validate your Hyperliquid credentials, and attempt a testnet deployment using the SDK. Successful runs log the method used and response payload; failures print detailed rejection reasons and exit with code `1`.
 * **yarn start:** Run your build.
 * **yarn lint:** Lint your TypeScript code using ESLint.
 * **yarn lint:fix:** Lint and fix your TypeScript code using ESLint.
