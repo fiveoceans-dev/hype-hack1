@@ -19,7 +19,7 @@ export interface VaultDeploymentPayload {
     }>
 }
 
-interface DeploymentSuccess {
+export interface DeploymentSuccess {
     methodSignature: string
     response: unknown
 }
@@ -43,6 +43,10 @@ type ClientRecord = Record<string, unknown>
 type DeploymentTarget = {
     target: ClientRecord | undefined
     method: string
+}
+
+export interface DeploymentResult extends DeploymentSuccess {
+    payload: VaultDeploymentPayload
 }
 
 const clientRecord = hyperliquidClient as ClientRecord
@@ -200,13 +204,22 @@ async function sendDeployment(payload: VaultDeploymentPayload): Promise<Deployme
     )
 }
 
+export async function performHyperliquidDeployment(): Promise<DeploymentResult> {
+    const payload = buildDeploymentPayload()
+    const { methodSignature, response } = await sendDeployment(payload)
+
+    return {
+        payload,
+        methodSignature,
+        response,
+    }
+}
+
 export async function deploy(): Promise<number> {
     console.info(`Preparing Hyperliquid deployment for vault ${hyperliquidConfig.vaultAddress}...`)
 
-    const payload = buildDeploymentPayload()
-
     try {
-        const { methodSignature, response } = await sendDeployment(payload)
+        const { methodSignature, response } = await performHyperliquidDeployment()
 
         console.info(`Hyperliquid deployment succeeded using ${methodSignature}.`)
         const formattedResponse = formatForLog(response)
