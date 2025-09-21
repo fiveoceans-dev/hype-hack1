@@ -1,4 +1,4 @@
-import * as HyperliquidSdk from "@hyperliquid/api"
+import * as HyperliquidSdk from "./sdk"
 
 import { hyperliquidConfig } from "../config/hyperliquid"
 
