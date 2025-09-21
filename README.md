@@ -82,6 +82,15 @@ Ready to ship? Build your project with:
 yarn build
 ```
 
+### 7. Deploying to Vercel
+
+This repository is configured for Vercel deployments out of the box:
+
+- `vercel.json` pins the runtime to **Node.js 20**, runs `yarn install --frozen-lockfile` during installs, and builds the CLI with `yarn build`.
+- A serverless function at `api/deploy.ts` exposes the existing Hyperliquid deployment flow over HTTP. Trigger a deployment by issuing a `POST` request to `/api/deploy`.
+
+Before deploying, add the required `HYPERLIQUID_*` environment variables to your Vercel project. A successful request returns JSON describing the invoked SDK method and payload. Non-`POST` requests receive a `405 Method Not Allowed` response that points to the supported method.
+
 ### Project Structure 📁
 
 ```bash
