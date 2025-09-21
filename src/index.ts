@@ -1,9 +1,7 @@
-import z from "zod"
-
-const isString = z.string()
+import { hyperliquidConfig } from "./config/hyperliquid"
 
 function main() {
-    console.log(isString.parse("Hello TypeScript!"))
+    console.log(`Hyperliquid configuration loaded for vault ${hyperliquidConfig.vaultAddress}.`)
 }
 
 main()
