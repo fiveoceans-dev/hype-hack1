@@ -1,3 +1,8 @@
+// deBridge SDK Client Wrapper
+// This module provides a client for interacting with the deBridge API.
+// It includes methods to get quotes, check order status, and retrieve supported chains and token lists.
+// The client is designed to handle network errors gracefully and provide informative error messages.
+
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios"
 
 import { debridgeConfig } from "../config/debridge"

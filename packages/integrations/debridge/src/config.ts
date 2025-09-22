@@ -1,3 +1,7 @@
+// deBridge Configuration
+// This module validates and exports configuration settings for connecting to the deBridge API.
+// It uses the zod library to ensure environment variables are correctly set and provides default values where appropriate.
+
 import { z } from "zod"
 
 const debridgeEnvSchema = z.object({
