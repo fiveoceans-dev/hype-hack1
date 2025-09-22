@@ -1,10 +1,11 @@
 {
-  "version": 2,
-  "functions": {
-    "api/*.ts": {
-      "runtime": "nodejs20.x"
+  "buildCommand": "cd packages/web && yarn build",
+  "outputDirectory": "packages/web/dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/"
     }
-  },
-  "installCommand": "yarn install --frozen-lockfile",
-  "buildCommand": "yarn build"
+  ]
 }

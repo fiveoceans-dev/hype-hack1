@@ -1,0 +1,35 @@
+# Ignore development files
+*.md
+*.log
+.env*
+.git
+.gitignore
+
+# Ignore non-web packages
+packages/backend
+packages/cli
+packages/scheduler
+packages/contracts
+packages/integrations
+
+# Ignore source files that aren't needed
+src
+test
+tests
+__tests__
+*.test.ts
+*.spec.ts
+
+# Ignore config files not needed for build
+.eslintrc*
+.prettierrc*
+jest.config.*
+tsconfig.json
+vitest.config.*
+
+# Keep only what's needed for the web build
+!packages/web
+!package.json
+!yarn.lock
+!.yarn
+!.yarnrc.yml
