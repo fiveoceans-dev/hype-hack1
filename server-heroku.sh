@@ -38,6 +38,29 @@ if ! command -v docker &> /dev/null; then
     exit 1
 fi
 
+# Ensure Docker daemon is running
+if ! docker info >/dev/null 2>&1; then
+    echo "❌ Error: Docker daemon is not running"
+    if [ "$(uname)" = "Darwin" ] && [ -d "/Applications/Docker.app" ]; then
+        echo "🟡 Attempting to start Docker Desktop..."
+        open -a Docker || true
+        echo "⏳ Waiting for Docker to start (up to 60s)..."
+        for i in {1..30}; do
+            sleep 2
+            if docker info >/dev/null 2>&1; then
+                echo "✅ Docker is now running"
+                break
+            fi
+            echo -n "."
+        done
+    fi
+    if ! docker info >/dev/null 2>&1; then
+        echo "❌ Still cannot connect to the Docker daemon."
+        echo "   Please start Docker Desktop (or your Docker engine) and retry."
+        exit 1
+    fi
+fi
+
 read -p "Enter your Heroku app name [hype-hack1-app]: " APP_NAME
 APP_NAME=${APP_NAME:-hype-hack1-app}
 
@@ -89,4 +112,3 @@ echo "📝 Recent logs:"
 heroku logs --tail --num 50 -a "$APP_NAME"
 
 echo "✅ Deployment initiated. App should be available soon: https://$APP_NAME.herokuapp.com"
-
