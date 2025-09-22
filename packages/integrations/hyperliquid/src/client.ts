@@ -1,5 +1,9 @@
-import * as HyperliquidSdk from "./sdk"
+// Hyperliquid SDK Client Wrapper
+// This module attempts to instantiate a Hyperliquid client and signer
+// using various known patterns from different versions of the SDK.
+// If all attempts fail, it falls back to a lightweight stub implementation.
 
+import * as HyperliquidSdk from "./sdk"
 import { hyperliquidConfig } from "../config/hyperliquid"
 
 export type HyperliquidChainIds = Readonly<{

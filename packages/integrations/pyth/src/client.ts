@@ -1,3 +1,8 @@
+// Pyth SDK Client Wrapper
+// This module provides a client for interacting with the Pyth Network's Price Service API.
+// It includes methods to fetch price data, price feed metadata, and search for price feeds.
+// The client is designed to handle network errors gracefully and provide informative error messages.
+
 import { HermesClient } from "@pythnetwork/hermes-client"
 // Import with defensive handling for CommonJS/ESM compatibility
 let PriceServiceConnection: any

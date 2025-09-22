@@ -1,3 +1,4 @@
+// Hyperliquid Deployment Script
 import { pathToFileURL } from "url"
 
 import { hyperliquidConfig } from "../config/hyperliquid"

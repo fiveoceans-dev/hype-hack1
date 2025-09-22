@@ -1,3 +1,7 @@
+// Pyth Network Configuration
+// This module validates and exports configuration settings for connecting to the Pyth Network's Price Service API.
+// It uses the zod library to ensure environment variables are correctly set and provides default values where appropriate.
+
 import { z } from "zod"
 
 const pythEnvSchema = z.object({
