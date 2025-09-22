@@ -127,3 +127,18 @@ ts-template/
 ### License 📄
 
 This project is licensed under the MIT License.
+
+## Vercel Deployment
+
+This repository includes a static dashboard and serverless API endpoints ready for Vercel.
+
+- Static site: `public/index.html` (served at `/`).
+- Serverless APIs: `api/stock-price.ts`, `api/evm-chains.ts`, `api/vault-info.ts`, `api/health.ts`.
+- No build step is required for the dashboard.
+
+Environment variables (optional):
+- `HYPERLIQUID_PRIVATE_KEY`, `HYPERLIQUID_TESTNET_RPC_URL`, `HYPERLIQUID_TESTNET_WS_URL`, `HYPERLIQUID_VAULT_ADDRESS`
+- `DEBRIDGE_API_URL`, `DEBRIDGE_API_KEY`
+- `PYTH_PRICE_SERVICE_URL`, `PYTH_API_KEY`
+
+After deploying on Vercel, visit `/` for the dashboard and `/api/*` for APIs.

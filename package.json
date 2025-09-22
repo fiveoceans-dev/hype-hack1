@@ -6,6 +6,9 @@
     "packages/*",
     "packages/integrations/*"
   ],
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "concurrently \"yarn workspace @hype/backend dev\" \"yarn workspace @hype/web dev\"",
     "dev:backend": "yarn workspace @hype/backend dev",
