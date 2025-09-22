@@ -248,7 +248,8 @@ const isExecutedDirectly = (() => {
     }
 
     try {
-        return import.meta.url === pathToFileURL(entry).href
+        // Check if this file is being executed directly
+        return __filename === entry || pathToFileURL(__filename).href === pathToFileURL(entry).href
     } catch (error) {
         console.warn(
             `Unable to determine execution context: ${
