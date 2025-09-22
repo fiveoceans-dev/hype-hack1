@@ -12,8 +12,8 @@
     "test": "echo \"No tests yet\""
   },
   "dependencies": {
-    "@hype/shared": "workspace:*",
     "@debridge-finance/debridge-protocol-evm-interfaces": "^1.0.4",
+    "@hype/shared": "workspace:*",
     "axios": "^1.12.2",
     "zod": "^3.21.4"
   },

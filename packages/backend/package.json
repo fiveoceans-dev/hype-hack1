@@ -4,7 +4,7 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "dev": "dotenv -e ../../.env -- ts-node-dev --respawn --transpile-only src/server.ts",
+    "dev": "dotenv -e ../../.env -- ts-node-dev --respawn --transpile-only ./src/server.ts",
     "build": "tsc",
     "start": "dotenv -e ../../.env -- node dist/server.js",
     "clean": "rm -rf dist node_modules",
@@ -12,13 +12,13 @@
     "test": "echo \"No tests yet\""
   },
   "dependencies": {
-    "@hype/shared": "workspace:*",
+    "@hype/debridge": "workspace:*",
     "@hype/hyperliquid": "workspace:*",
     "@hype/pyth": "workspace:*",
-    "@hype/debridge": "workspace:*",
-    "express": "^5.1.0",
+    "@hype/shared": "workspace:*",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "express": "^5.1.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {

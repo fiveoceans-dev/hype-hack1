@@ -1,8 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import path from 'path';
-import { HermesClient } from '@pythnetwork/hermes-client';
-import { createDebridgeClient } from '../debridge/client';
 import { z } from 'zod';
 
 const app = express();
@@ -11,13 +9,9 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../../public')));
 
 // Tesla stock price feed ID (GME not available in Pyth)
 const TESLA_PRICE_FEED_ID = '16dad506d7db8da01c87581c87ca897a012a153557d4d578c3b9c9e1bc0632f1';
-
-// Initialize Pyth client
-let pythClient: HermesClient | null = null;
 
 // Simple config schemas with defaults
 const pythConfigOptional = z.object({
@@ -32,107 +26,52 @@ const hyperliquidConfigOptional = z.object({
     HYPERLIQUID_VAULT_ADDRESS: z.string().default('0x0000000000000000000000000000000000000000')
 });
 
-async function initPythClient() {
-    if (!pythClient) {
-        try {
-            const config = pythConfigOptional.parse(process.env);
-            pythClient = new HermesClient(config.PYTH_PRICE_SERVICE_URL);
-        } catch (error) {
-            console.warn('Failed to initialize Pyth client:', error);
-            pythClient = new HermesClient('https://hermes.pyth.network');
-        }
-    }
-    return pythClient;
-}
 
 // API Endpoints
 
 // Get stock price (Tesla instead of GameStop)
 app.get('/api/stock-price', async (req: Request, res: Response) => {
     try {
-        const client = await initPythClient();
-        const priceUpdates = await client.getLatestPriceUpdates([TESLA_PRICE_FEED_ID]);
-        
-        if (priceUpdates && priceUpdates.parsed && priceUpdates.parsed.length > 0) {
-            const teslaPrice = priceUpdates.parsed[0];
-            const price = parseFloat(teslaPrice.price.price) * Math.pow(10, teslaPrice.price.expo);
-            const confidence = parseFloat(teslaPrice.price.conf) * Math.pow(10, teslaPrice.price.expo);
-            const publishTime = teslaPrice.price.publishTime || teslaPrice.price.publish_time || Date.now() / 1000;
-            
-            res.json({
-                symbol: 'TSLA',
-                name: 'Tesla Inc.',
-                price: price.toFixed(2),
-                confidence: confidence.toFixed(2),
-                timestamp: new Date(publishTime * 1000).toISOString(),
-                note: 'GameStop (GME) is not available in Pyth Network, showing Tesla instead'
-            });
-        } else {
-            res.status(404).json({ error: 'Price data not available' });
-        }
-    } catch (error: any) {
-        console.error('Error fetching stock price:', error?.message || error);
-        // Return demo data if API fails
+        // Return demo data for now
+        // TODO: Integrate with Pyth client from @hype/pyth package
         res.json({
             symbol: 'TSLA',
             name: 'Tesla Inc.',
-            price: '245.87',
-            confidence: '1.23',
+            price: '425.99',
+            confidence: '0.33',
             timestamp: new Date().toISOString(),
-            note: 'Demo data - live feed temporarily unavailable'
+            note: 'Demo data - Pyth integration pending'
         });
+    } catch (error: any) {
+        console.error('Error fetching stock price:', error?.message || error);
+        res.status(500).json({ error: 'Failed to fetch stock price' });
     }
 });
 
 // Get supported EVM chains from deBridge
 app.get('/api/evm-chains', async (req: Request, res: Response) => {
     try {
-        const client = await createDebridgeClient();
-        if (!client) {
-            // Return demo data if client is not available
-            res.json({
-                total: 5,
-                chains: [
-                    { id: 1, name: 'Ethereum', type: 'evm' },
-                    { id: 137, name: 'Polygon', type: 'evm' },
-                    { id: 42161, name: 'Arbitrum', type: 'evm' },
-                    { id: 10, name: 'Optimism', type: 'evm' },
-                    { id: 56, name: 'BNB Smart Chain', type: 'evm' }
-                ],
-                note: 'Demo data - configure deBridge API for live data'
-            });
-            return;
-        }
-        
-        const chains = await client.getSupportedChains();
-        
-        // Filter for EVM chains (exclude Solana)
-        const evmChains = chains.filter(chain => 
-            !chain.chainName.toLowerCase().includes('solana')
-        );
-        
+        // Return demo data for now
+        // TODO: Integrate with deBridge client from @hype/debridge package
         res.json({
-            total: evmChains.length,
-            chains: evmChains.map(chain => ({
-                id: chain.chainId,
-                name: chain.chainName,
-                type: chain.chainType || 'evm'
-            }))
-        });
-    } catch (error: any) {
-        console.error('Error fetching EVM chains:', error?.message || error);
-        // Return demo data on error
-        res.json({
-            total: 5,
+            total: 10,
             chains: [
                 { id: 1, name: 'Ethereum', type: 'evm' },
                 { id: 137, name: 'Polygon', type: 'evm' },
                 { id: 42161, name: 'Arbitrum', type: 'evm' },
                 { id: 10, name: 'Optimism', type: 'evm' },
-                { id: 56, name: 'BNB Smart Chain', type: 'evm' }
+                { id: 56, name: 'BNB Smart Chain', type: 'evm' },
+                { id: 43114, name: 'Avalanche', type: 'evm' },
+                { id: 8453, name: 'Base', type: 'evm' },
+                { id: 100, name: 'Gnosis', type: 'evm' },
+                { id: 5000, name: 'Mantle', type: 'evm' },
+                { id: 59144, name: 'Linea', type: 'evm' }
             ],
-            note: 'Demo data - API temporarily unavailable'
+            note: 'Demo data - deBridge integration pending'
         });
+    } catch (error: any) {
+        console.error('Error fetching EVM chains:', error?.message || error);
+        res.status(500).json({ error: 'Failed to fetch chains' });
     }
 });
 
@@ -175,10 +114,6 @@ app.get('/api/health', (req: Request, res: Response) => {
     });
 });
 
-// Serve the main page
-app.get('/', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../../public/index.html'));
-});
 
 // Start server
 app.listen(PORT, () => {
