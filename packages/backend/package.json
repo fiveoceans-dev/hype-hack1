@@ -1,0 +1,33 @@
+{
+  "name": "@hype/backend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "dotenv -e ../../.env -- ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "dotenv -e ../../.env -- node dist/server.js",
+    "clean": "rm -rf dist node_modules",
+    "lint": "eslint src",
+    "test": "echo \"No tests yet\""
+  },
+  "dependencies": {
+    "@hype/shared": "workspace:*",
+    "@hype/hyperliquid": "workspace:*",
+    "@hype/pyth": "workspace:*",
+    "@hype/debridge": "workspace:*",
+    "express": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^18.11.18",
+    "dotenv-cli": "^7.4.2",
+    "eslint": "^9.4.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.0"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../shared" },
+    { "path": "../integrations/hyperliquid" },
+    { "path": "../integrations/pyth" },
+    { "path": "../integrations/debridge" }
+  ]
+}
