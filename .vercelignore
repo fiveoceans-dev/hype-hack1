@@ -28,8 +28,10 @@ tsconfig.json
 vitest.config.*
 
 # Keep only what's needed for the web build
-!packages/web
+!public
+!api
 !package.json
 !yarn.lock
 !.yarn
 !.yarnrc.yml
+!vercel.json
