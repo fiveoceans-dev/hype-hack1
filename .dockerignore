@@ -1,0 +1,24 @@
+node_modules
+npm-debug.log
+Dockerfile*
+.dockerignore
+.git
+.gitignore
+**/.git
+**/node_modules
+**/dist
+**/.cache
+**/.vite
+**/.next
+**/.vercel
+.yarn
+.pnp.cjs
+.pnp.loader.mjs
+
+# Large nested project
+/aesthetic-template-kit/node_modules
+/aesthetic-template-kit/.git
+
+# Local env
+.env
+

@@ -7,11 +7,12 @@ import { z } from 'zod';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const UI_DIR = process.env.UI_DIR || path.join(__dirname, '../../public');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../../public')));
+app.use(express.static(UI_DIR));
 
 // Tesla stock price feed ID (GME not available in Pyth)
 const TESLA_PRICE_FEED_ID = '16dad506d7db8da01c87581c87ca897a012a153557d4d578c3b9c9e1bc0632f1';
@@ -175,9 +176,14 @@ app.get('/api/health', (req: Request, res: Response) => {
     });
 });
 
-// Serve the main page
+// Serve the main page and SPA fallback
 app.get('/', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../../public/index.html'));
+    res.sendFile(path.join(UI_DIR, 'index.html'));
+});
+
+// Fallback to index.html for non-API routes (SPA support)
+app.get(/^\/(?!api\/).*/, (req: Request, res: Response) => {
+    res.sendFile(path.join(UI_DIR, 'index.html'));
 });
 
 // Start server
