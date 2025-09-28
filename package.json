@@ -1,11 +1,14 @@
 {
   "name": "@hype/app",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "engines": {
     "node": "20.x"
   },
   "scripts": {
-    "dev": "npm run build:frontend && NODE_ENV=development ts-node-dev --respawn --transpile-only ./src/web/server.ts",
+    "dev": "npm run dev:watch",
     "dev:watch": "concurrently --names \"🏗️BUILD,🚀SERVER\" --prefix-colors \"yellow,cyan\" \"npm run watch:frontend\" \"npm run dev:server\"",
     "dev:server": "NODE_ENV=development ts-node-dev --respawn --transpile-only ./src/web/server.ts",
     "watch:frontend": "cd packages/web && npm run build:watch",

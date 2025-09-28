@@ -4,10 +4,25 @@ import path from 'path';
 import { HermesClient } from '@pythnetwork/hermes-client';
 import { createDebridgeClient } from '../debridge/client';
 import { z } from 'zod';
+import fs from 'fs';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const UI_DIR = process.env.UI_DIR || path.join(__dirname, '../../packages/web/dist');
+// Resolve UI directory robustly for both ts-node (src/...) and built (dist/...) contexts
+function resolveUiDir(): string {
+  const fromEnv = process.env.UI_DIR;
+  if (fromEnv && fs.existsSync(fromEnv)) return fromEnv;
+  const candidates = [
+    path.join(__dirname, '../../packages/web/dist'), // running from src/*
+    path.join(__dirname, '../../../packages/web/dist'), // running from dist/web/*
+    path.resolve(process.cwd(), 'packages/web/dist'), // project root
+  ];
+  for (const p of candidates) {
+    if (fs.existsSync(p)) return p;
+  }
+  return candidates[0];
+}
+const UI_DIR = resolveUiDir();
 
 // Middleware
 app.use(cors());
@@ -178,12 +193,22 @@ app.get('/api/health', (req: Request, res: Response) => {
 
 // Serve the main page and SPA fallback
 app.get('/', (req: Request, res: Response) => {
-    res.sendFile(path.join(UI_DIR, 'index.html'));
+    const indexPath = path.join(UI_DIR, 'index.html');
+    if (!fs.existsSync(indexPath)) {
+        res.status(503).send('<!doctype html><html><body style="font-family:system-ui;background:#0b1220;color:#cbd5e1;display:flex;align-items:center;justify-content:center;height:100vh"><div><h1>Building UI…</h1><p>Please wait a moment and refresh.</p></div></body></html>');
+        return;
+    }
+    res.sendFile(indexPath);
 });
 
 // Fallback to index.html for non-API routes (SPA support)
 app.get(/^\/(?!api\/).*/, (req: Request, res: Response) => {
-    res.sendFile(path.join(UI_DIR, 'index.html'));
+    const indexPath = path.join(UI_DIR, 'index.html');
+    if (!fs.existsSync(indexPath)) {
+        res.status(503).send('<!doctype html><html><body style="font-family:system-ui;background:#0b1220;color:#cbd5e1;display:flex;align-items:center;justify-content:center;height:100vh"><div><h1>Building UI…</h1><p>Please wait a moment and refresh.</p></div></body></html>');
+        return;
+    }
+    res.sendFile(indexPath);
 });
 
 // Start server
