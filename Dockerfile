@@ -1,8 +1,8 @@
 # ---- Frontend build (Vite) ----
 FROM node:20-bullseye-slim AS frontend-build
 WORKDIR /app/frontend
-COPY aesthetic-template-kit/package*.json ./
-RUN npm ci || npm i
+COPY aesthetic-template-kit/package.json ./
+RUN npm install --no-audit --no-fund --legacy-peer-deps
 COPY aesthetic-template-kit .
 RUN npm run build
 
@@ -10,8 +10,8 @@ RUN npm run build
 FROM node:20-bullseye-slim AS server-build
 WORKDIR /app
 COPY package.json ./
-# Install only what's in package.json; yarn.lock may not exist for npm
-RUN npm i
+# Install dependencies (tolerate peer dep mismatches in CI)
+RUN npm install --no-audit --no-fund --legacy-peer-deps
 COPY tsconfig.json build.ts ./
 COPY src ./src
 RUN npm run build
@@ -35,4 +35,3 @@ ENV UI_DIR=/app/static
 
 EXPOSE 3000
 CMD ["node", "dist/web/server.js"]
-

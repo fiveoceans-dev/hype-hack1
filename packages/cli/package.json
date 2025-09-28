@@ -14,10 +14,6 @@
     "test": "echo \"No tests yet\""
   },
   "dependencies": {
-    "@hype/debridge": "workspace:*",
-    "@hype/hyperliquid": "workspace:*",
-    "@hype/pyth": "workspace:*",
-    "@hype/shared": "workspace:*",
     "dotenv": "^16.4.5",
     "zod": "^3.21.4"
   },

@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const UI_DIR = process.env.UI_DIR || path.join(__dirname, '../../public');
+const UI_DIR = process.env.UI_DIR || path.join(__dirname, '../../packages/web/dist');
 
 // Middleware
 app.use(cors());
@@ -188,10 +188,12 @@ app.get(/^\/(?!api\/).*/, (req: Request, res: Response) => {
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log(`📊 API endpoints:`);
-    console.log(`   - GET /api/stock-price   (Tesla stock price)`);
-    console.log(`   - GET /api/evm-chains    (Supported EVM chains)`);
+    console.log(`🚀 HyperMetal Trading App running on http://localhost:${PORT}`);
+    console.log(`📊 Live trading interface with Pyth Network data`);
+    console.log(`📡 API endpoints available:`);
+    console.log(`   - GET /api/stock-price   (Tesla stock price via Pyth)`);
+    console.log(`   - GET /api/evm-chains    (Supported EVM chains via deBridge)`);
     console.log(`   - GET /api/vault-info    (Hyperliquid vault info)`);
     console.log(`   - GET /api/health        (Health check)`);
+    console.log(`✨ Open http://localhost:${PORT} to access the trading interface`);
 });
